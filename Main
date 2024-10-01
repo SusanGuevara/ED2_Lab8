@@ -43,6 +43,7 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+uint8_t pModo;
 uint8_t contadorDecimal;
 uint8_t contadorBinario;
 /* USER CODE END PV */
@@ -86,9 +87,9 @@ void mostrarNumeroDecimal(uint8_t d){
 			HAL_GPIO_WritePin(Led4_GPIO_Port, Led4_Pin, GPIO_PIN_RESET);
 			break;
 		case 4:
-			HAL_GPIO_WritePin(Led1_GPIO_Port, Led1_Pin, GPIO_PIN_SET);
-			HAL_GPIO_WritePin(Led2_GPIO_Port, Led2_Pin, GPIO_PIN_SET);
-			HAL_GPIO_WritePin(Led3_GPIO_Port, Led3_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(Led1_GPIO_Port, Led1_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(Led2_GPIO_Port, Led2_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(Led3_GPIO_Port, Led3_Pin, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(Led4_GPIO_Port, Led4_Pin, GPIO_PIN_SET);
 			break;
 		default:
@@ -240,47 +241,47 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	if(HAL_GPIO_ReadPin(BTN_Modo_GPIO_Port, BTN_Modo_Pin)==0){ // El pin está apagado, así que el botón modo no esta siendo presionado
-	// Configuración del modo decimal
-		if(HAL_GPIO_ReadPin(BTN_Suma_GPIO_Port, BTN_Suma_Pin)==0){ // Cuando presionan el botón de suma, el cual es pull-up
-			if(contadorDecimal<5){ // Asegura que la cuenta llega hasta 4
-				contadorDecimal++;// Lleva la cuenta de cuantas veces ha sido presionado el botón
-				mostrarNumeroDecimal(contadorDecimal);
-			}else{
-				contadorDecimal=0; // Reinicia el contador
-			} // Cierre de la condición de máximo
-		} // Cierre del botón suma
-		HAL_Delay(300);
-		if(HAL_GPIO_ReadPin(BTN_Resta_GPIO_Port, BTN_Resta_Pin)==1){ // Cuando presionan el botón de resta, el cual es pull-down
-			if(contadorDecimal<0||contadorDecimal>4){ // Asegura que la cuenta este entre 0 y 4
-				contadorDecimal=0; // Reinicia el contador
-			}else{
-				contadorDecimal--;// Lleva la cuenta de cuantas veces ha sido presionado el botón
-				mostrarNumeroDecimal(contadorDecimal);
-			} // Cierre de la condición del rango
-		} // Cierre del botón resta
-		HAL_Delay(300);
-	}else{
-	// Configuración del modo binario
-		if(HAL_GPIO_ReadPin(BTN_Suma_GPIO_Port, BTN_Suma_Pin)==0){ // Cuando presionan el botón de suma, el cual es pull-up
-			if(contadorBinario<16){ // Asegura que la cuenta llega hasta 15
-				mostrarNumeroBinario(contadorBinario);
-				contadorBinario++;// Lleva la cuenta de cuantas veces ha sido presionado el botón
-			}else{
-				contadorBinario=0; // Reinicia el contador
-			} // Cierre de la condición de máximo
-			HAL_Delay(300);
-		} // Cierre del botón suma
-		if(HAL_GPIO_ReadPin(BTN_Resta_GPIO_Port, BTN_Resta_Pin)==1){ // Cuando presionan el botón de resta, el cual es pull-down
-			if(contadorBinario<0||contadorBinario>15){ // Asegura que la cuenta este entre 0 y 15
-				contadorBinario=0; // Reinicia el contador
-			}else{
-				contadorBinario--;// Lleva la cuenta de cuantas veces ha sido presionado el botón
-				mostrarNumeroBinario(contadorBinario);
-			} // Cierre de la condición del rango
-			HAL_Delay(300);
-		} // Cierre del botón resta
-	}
+	  if(HAL_GPIO_ReadPin(BTN_Modo_GPIO_Port, BTN_Modo_Pin)==0){ // El pin está apagado, así que el botón modo no esta siendo presionado
+	  	// Configuración del modo decimal
+	  	if(HAL_GPIO_ReadPin(BTN_Suma_GPIO_Port, BTN_Suma_Pin)==1){ // Cuando presionan el botón de suma, el cual es pull-up
+	  		if(contadorDecimal<5){ // Asegura que la cuenta llega hasta 4
+	  			contadorDecimal++;// Lleva la cuenta de cuantas veces ha sido presionado el botón
+	  			mostrarNumeroDecimal(contadorDecimal);
+	  		}else{
+	  			contadorDecimal=0; // Reinicia el contador
+	  		} // Cierre de la condición de máximo
+	  	} // Cierre del botón suma
+	  	HAL_Delay(300);
+	  	if(HAL_GPIO_ReadPin(BTN_Resta_GPIO_Port, BTN_Resta_Pin)==0){ // Cuando presionan el botón de resta, el cual es pull-down
+	  		if(contadorDecimal<0||contadorDecimal>4){ // Asegura que la cuenta este entre 0 y 4
+	  			contadorDecimal=0; // Reinicia el contador
+	  		}else{
+	  			contadorDecimal--;// Lleva la cuenta de cuantas veces ha sido presionado el botón
+	  			mostrarNumeroDecimal(contadorDecimal);
+	  		} // Cierre de la condición del rango
+	  	} // Cierre del botón resta
+	  	HAL_Delay(300);
+	  }else{
+	  	// Configuración del modo binario
+	  	if(HAL_GPIO_ReadPin(BTN_Suma_GPIO_Port, BTN_Suma_Pin)==1){ // Cuando presionan el botón de suma, el cual es pull-up
+	  		if(contadorBinario<16){ // Asegura que la cuenta llega hasta 15
+	  			mostrarNumeroBinario(contadorBinario);
+	  			contadorBinario++;// Lleva la cuenta de cuantas veces ha sido presionado el botón
+	  		}else{
+	  			contadorBinario=0; // Reinicia el contador
+	  		} // Cierre de la condición de máximo
+	  		HAL_Delay(300);
+	  	} // Cierre del botón suma
+	  	if(HAL_GPIO_ReadPin(BTN_Resta_GPIO_Port, BTN_Resta_Pin)==0){ // Cuando presionan el botón de resta, el cual es pull-down
+	  		if(contadorBinario<0||contadorBinario>15){ // Asegura que la cuenta este entre 0 y 15
+	  			contadorBinario=0; // Reinicia el contador
+	  		}else{
+	  			contadorBinario--;// Lleva la cuenta de cuantas veces ha sido presionado el botón
+	  			mostrarNumeroBinario(contadorBinario);
+	  		} // Cierre de la condición del rango
+	  		HAL_Delay(300);
+	  	} // Cierre del botón resta
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -400,13 +401,13 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : BTN_Modo_Pin */
   GPIO_InitStruct.Pin = BTN_Modo_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(BTN_Modo_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : BTN_Suma_Pin */
   GPIO_InitStruct.Pin = BTN_Suma_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(BTN_Suma_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : Led2_Pin Led1_Pin */
@@ -426,7 +427,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : BTN_Resta_Pin */
   GPIO_InitStruct.Pin = BTN_Resta_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(BTN_Resta_GPIO_Port, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
